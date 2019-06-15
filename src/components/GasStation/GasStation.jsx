@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 
 class GasStation extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
+        const { station } = this.props;
         return (
-            <div>Gas Station</div>
+            <div>{station.address}</div>
         )
     }
 }
