@@ -2,13 +2,36 @@ import React, { Component } from 'react';
 import './App.css';
 import GasStation from './components/GasStation/GasStation';
 import MyGasFeedAPI from './services/MyGasFeedAPI';
+import LocationIQAPI from './services/LocationIQAPI';
+
+const GAS_STATION_REQUEST_STATUS ={
+  NOT_SENT: 'NOT_SENT',
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+};
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      destinationInputValue: '',
-      gasStations: []
+      locationInputValue: '',
+      searchRadiusOptions: [{
+        value: 1,
+        name: '1 mile'
+      },
+      {
+        value: 5,
+        name: '5 miles'
+      },
+      {
+        value: 10,
+        name: '10 miles'
+      }
+    ],
+      searchRadiusInMiles: 1,
+      gasStations: null,
+      gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.NOT_SENT
     };
 
     this.findStations = this.findStations.bind(this);
@@ -19,40 +42,46 @@ class App extends Component {
     if (navigator.geolocation) {
       console.log('Geolocation is supported!');
     }
+    // CanIUse shows support on all browsers so this condition should not be hit.
     else {
       console.log('Geolocation is not supported for this Browser/OS.');
     }
   }
 
   findStations = () => {
-    // const { destinationInputValue } = this.state;
-    // const gasStations = MyGasFeedAPI.getGasStations();
-    // console.log(gasStations);
-    // this.setState({ gasStations: gasStations });
+    const { locationInputValue, searchRadiusInMiles } = this.state;
+
+    this.setState({ gasStations: [], gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.PENDING });
+
+    LocationIQAPI.getCoordinates(locationInputValue)
+      .then((result) => MyGasFeedAPI.getNearbyGasStations(result[0].lat, result[0].lon, searchRadiusInMiles))
+      .then((result) => this.setState({ gasStations: result.stations, gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.SUCCESS }))
+      .catch(() => this.setState({ gasStations: [], gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.FAILED }))
   }
 
   findStationsNearMe = () => {
+    const { searchRadiusInMiles } = this.state;
+
+    this.setState({ gasStations: [], gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.PENDING });
+
     const geoSuccess = (position) => {
-      // hideNudgeBanner();
-      // We have the location, don't display banner
-      // clearTimeout(nudgeTimeoutId);
-      MyGasFeedAPI.getNearbyGasStations(position.coords.latitude, position.coords.longitude)
-        .then((data) => {
-          this.setState({ gasStations: data.stations });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      // startPos = position;
-      // document.getElementById('startLat').innerHTML = startPos.coords.latitude;
-      // document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+      MyGasFeedAPI.getNearbyGasStations(position.coords.latitude, position.coords.longitude, searchRadiusInMiles)
+        .then((data) => this.setState({ gasStations: data.stations, gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.SUCCESS }))
+        .catch(() => this.setState({ gasStations: [], gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.FAILED }))
     };
 
     const geoError = (error) => {
+      console.log(error);
       switch(error.code) {
+        case error.PERMISSION_DENIED:
+          // geolocation can be denied in a few conidition: 1) user denied, 2) denied due to not serving site over https.
+          console.log(`Denied geolocation for the following reason: ${error.message}`);
+          break;
+        case error.POSITION_UNAVAILABLE:
+          console.log('Position Unavailable');
+          break;
         case error.TIMEOUT:
-          // The user didn't accept the callout
-          // showNudgeBanner();
+          console.log('Geolocation timed out');
           break;
       }
     };
@@ -60,19 +89,43 @@ class App extends Component {
   }
 
   handleInputChange = (event) => {
-    this.setState({ destinationInputValue: event.target.value });
+    this.setState({ locationInputValue: event.target.value });
+  }
+
+  handleSelectChange = (event) => {
+    this.setState({ searchRadiusInMiles: event.target.value });
   }
 
   renderGasStations() {
-    const { gasStations } = this.state;
+    const { gasStations, gasStationRequestStatus } = this.state;
 
-    return gasStations.map((gasStation) => {
-      return <GasStation key={gasStation.address} station={gasStation}></GasStation>
-    });
+    if (gasStations && gasStations.length === 0 && gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.SUCCESS) {
+      //TODO: Show something better looking than a plain div with no styling.
+      return <div>No results found!</div>
+    } else if (gasStations && gasStations.length) {
+      return gasStations.map((gasStation) => {
+        return <GasStation key={gasStation.address} station={gasStation}></GasStation>
+      });
+    } else if(gasStations && gasStations.length === 0 && gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.FAILED) {
+      //TODO: Show something better looking than a plain div with no styling.
+      return <div>Error retrieving gas stations</div>
+    }
+  }
+
+  renderLoadingSpinner() {
+    const { gasStationRequestStatus } = this.state;
+    if (gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.PENDING) {
+      //TODO: show a spinner instead
+      return <div>Loading...</div>;
+    } else {
+      return null;
+    }
   }
 
   render() {
-    const { destinationInputValue } = this.state;
+    const { locationInputValue, gasStationRequestStatus, searchRadiusOptions } = this.state;
+    const pendingRequest = gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.PENDING;
+    const disableFindStationButton = locationInputValue.length <= 10;
     return (
       <div className="App">
         <div className="App-header">
@@ -80,10 +133,16 @@ class App extends Component {
           {/* <h2>Welcome to React</h2> */}
         </div>
         <div className="col-xs-12">
-          <input value={destinationInputValue} onChange={this.handleInputChange} placeholder="Enter a location"></input>
-          <button onClick={this.findStations}>Find a Station</button>
-          <button onClick={this.findStationsNearMe}>Find Near Me</button>
+          <input value={locationInputValue} onChange={this.handleInputChange} placeholder="Enter a location"></input>
+          <select onChange={this.handleSelectChange}>
+            {searchRadiusOptions.map((option, i) => {
+              return <option key={i} value={option.value}>{option.name}</option>
+            })}
+          </select>
+          <button disabled={pendingRequest || disableFindStationButton} onClick={this.findStations}>Find a Station</button>
+          <button disabled={pendingRequest} onClick={this.findStationsNearMe}>Find Near Me</button>
         </div>
+        {this.renderLoadingSpinner()}
         {this.renderGasStations()}
       </div>
     );

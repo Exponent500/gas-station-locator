@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const BASE_URL = `http://devapi.mygasfeed.com`;
+// Would prefer to house these in a remote location (ala CAAS repo)
+const BASE_PRODUCTION_URL = 'http://api.mygasfeed.com/';
+const PRODUCTION_API_KEY = '719oxpllmo';
 
 class MyGasFeedAPI {
-    constructor() {}
-
-    getNearbyGasStations(latitude, longitude) {
-        // stations/radius/(Latitude)/(Longitude)/(distance)/(fuel type)/(sort by)/apikey.json?callback=?
-        const url = `${BASE_URL}/stations/radius/${latitude}/${longitude}/10/reg/distance/rfej9napna.json`;
+    getNearbyGasStations(latitude, longitude, searchRadius) {
+        // hard-coding the distance to search to be in a 10 mile radius
+        const url = `${BASE_PRODUCTION_URL}stations/radius/${latitude}/${longitude}/${searchRadius}/reg/distance/${PRODUCTION_API_KEY}.json`;
         return new Promise((resolve, reject) => {
             axios.get(url)
                 .then((response) => resolve(response.data))
