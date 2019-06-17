@@ -142,22 +142,26 @@ class App extends Component {
         </AppHeader>
         <ContentWrapper className="col-xs-12">
           <LocationInput
+            className="col-xs-4"
             value={locationInputValue}
             onChange={this.handleInputChange}
             placeholder="Enter a location">
           </LocationInput>
           <RadiusSelect
+            className="col-xs-2"
             onChange={this.handleSelectChange}>
               {searchRadiusOptions.map((option, i) => {
                 return <option key={i} value={option.value}>{option.name}</option>
               })}
           </RadiusSelect>
           <FindStationButton
+            className="btn btn-primary col-xs-2"
             disabled={pendingRequest || disableFindStationButton}
             onClick={this.findStations}>
               Find a Station
           </FindStationButton>
           <FindStationNearMeButton
+            className="btn btn-primary col-xs-2"
             disabled={pendingRequest}
             onClick={this.findStationsNearMe}>
               Find Near Me

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import unbrandedStationImage from '../../assets/images/unbranded-station.png';
+import unbrandedStationImage from '../../assets/images/Transport-Gas-Pump-icon.png';
 
 import {
     Wrapper,
     Logo,
+    LogoWrapper,
     Name,
-    Address,
+    AddressLine1,
+    AddressLine2,
     City,
     Region,
     Zipcode,
@@ -14,7 +16,8 @@ import {
     PricesWrapper,
     RegularPrice,
     MidGradePrice,
-    PremiumPrice
+    PremiumPrice,
+    GasTypeHeader
 } from './styles';
 
 class GasStation extends Component {
@@ -30,19 +33,34 @@ class GasStation extends Component {
     render() {
         const { station } = this.props;
         return (
-            <Wrapper>
-                {this.renderLogo()}
-                <Name>{station.station}</Name>
-                <Address>{station.address}</Address>
-                <City>{station.city}</City>,
-                <Region>{station.region}</Region>,
-                <Zipcode>{station.zip}</Zipcode>
-                <Country>{station.country}</Country>
-                <DistanceToLocation>{station.distance}</DistanceToLocation>
-                <PricesWrapper>
-                    <RegularPrice>{station.reg_price}</RegularPrice>
-                    <MidGradePrice>{station.mid_price}</MidGradePrice>
-                    <PremiumPrice>{station.pre_price}</PremiumPrice>
+            <Wrapper className="col-10 offset-1">
+                <LogoWrapper className="col-2">
+                    {this.renderLogo()}
+                </LogoWrapper>
+                <div className="col-4">
+                    <Name>{station.station}</Name>
+                    <AddressLine1>{station.address}</AddressLine1>
+                    <AddressLine2>
+                        <City>{station.city}</City>,
+                        <Region>{station.region}</Region>,
+                        <Zipcode>{station.zip}</Zipcode>
+                    </AddressLine2>
+                    <Country>{station.country}</Country>
+                    <DistanceToLocation>{station.distance} away</DistanceToLocation>
+                </div>
+                <PricesWrapper className="col-6">
+                    <div className="col-4">
+                        <GasTypeHeader>Regular</GasTypeHeader>
+                        <RegularPrice>${station.reg_price}</RegularPrice>
+                    </div>
+                    <div className="col-4">
+                        <GasTypeHeader>Mid</GasTypeHeader>
+                        <MidGradePrice>${station.mid_price}</MidGradePrice>
+                    </div>
+                    <div className="col-4">
+                    <   GasTypeHeader>Premium</GasTypeHeader>
+                        <PremiumPrice>${station.pre_price}</PremiumPrice>
+                    </div>
                 </PricesWrapper>
             </Wrapper>
         )
