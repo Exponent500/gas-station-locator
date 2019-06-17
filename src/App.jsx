@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import './App.css';
+import {
+  AppWrapper,
+  AppHeader,
+  ContentWrapper,
+  LocationInput,
+  RadiusSelect,
+  FindStationButton,
+  FindStationNearMeButton
+} from './styles'
 import GasStation from './components/GasStation/GasStation';
 import MyGasFeedAPI from './services/MyGasFeedAPI';
 import LocationIQAPI from './services/LocationIQAPI';
@@ -127,24 +135,37 @@ class App extends Component {
     const pendingRequest = gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.PENDING;
     const disableFindStationButton = locationInputValue.length <= 10;
     return (
-      <div className="App">
-        <div className="App-header">
+      <AppWrapper>
+        <AppHeader>
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
           {/* <h2>Welcome to React</h2> */}
-        </div>
-        <div className="col-xs-12">
-          <input value={locationInputValue} onChange={this.handleInputChange} placeholder="Enter a location"></input>
-          <select onChange={this.handleSelectChange}>
-            {searchRadiusOptions.map((option, i) => {
-              return <option key={i} value={option.value}>{option.name}</option>
-            })}
-          </select>
-          <button disabled={pendingRequest || disableFindStationButton} onClick={this.findStations}>Find a Station</button>
-          <button disabled={pendingRequest} onClick={this.findStationsNearMe}>Find Near Me</button>
-        </div>
-        {this.renderLoadingSpinner()}
-        {this.renderGasStations()}
-      </div>
+        </AppHeader>
+        <ContentWrapper className="col-xs-12">
+          <LocationInput
+            value={locationInputValue}
+            onChange={this.handleInputChange}
+            placeholder="Enter a location">
+          </LocationInput>
+          <RadiusSelect
+            onChange={this.handleSelectChange}>
+              {searchRadiusOptions.map((option, i) => {
+                return <option key={i} value={option.value}>{option.name}</option>
+              })}
+          </RadiusSelect>
+          <FindStationButton
+            disabled={pendingRequest || disableFindStationButton}
+            onClick={this.findStations}>
+              Find a Station
+          </FindStationButton>
+          <FindStationNearMeButton
+            disabled={pendingRequest}
+            onClick={this.findStationsNearMe}>
+              Find Near Me
+          </FindStationNearMeButton>
+          {this.renderLoadingSpinner()}
+          {this.renderGasStations()}
+        </ContentWrapper>
+      </AppWrapper>
     );
   }
 }
