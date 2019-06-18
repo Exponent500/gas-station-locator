@@ -21,12 +21,6 @@ export const LogoWrapper = styled.div`
     padding-left: 0px;
 `;
 
-export const Logo = styled.img`
-    max-height: 100%;
-    max-width: 100%;
-    border-radius: 10px;
-`;
-
 export const Name = styled.div`
     text-align: left;
     font-weight: bold;

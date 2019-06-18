@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import Image from '../Image/Image';
 import unbrandedStationImage from '../../assets/images/unbranded-station.png';
+import fallBackStationImage from '../../assets/images/404.png';
 
 import {
     Wrapper,
-    Logo,
     LogoWrapper,
     Name,
     AddressLine1,
@@ -29,10 +30,11 @@ class GasStation extends Component {
         // Remove all whitespace, including spaces. This handles the corner case where the station name is 'Circle K'. In this case
         // we want to have the string be 'CircleK' instead of 'Circle K'. so that we point to the correct image source for this station.
         station.station = station.station.replace(/\s/g, '');
+        // sometimes the GasFeedApi returns stations who's names are 'Unbranded'
         if (station.station === 'Unbranded') {
-            return <Logo src={unbrandedStationImage}></Logo>
+            return <Image src={unbrandedStationImage} fallBackSrc={fallBackStationImage}></Image>
         } else {
-            return <Logo src={`//logo.clearbit.com/${station.station}.com`} alt={unbrandedStationImage}></Logo>
+            return <Image src={`//logo.clearbit.com/${station.station}.com`} fallBackSrc={fallBackStationImage}></Image>
         }
     }
 
