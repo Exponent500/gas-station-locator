@@ -150,6 +150,7 @@ class App extends Component {
             <div className="input-group">
               <LocationInput
                 className="form-control"
+                disabled={pendingRequest}
                 value={locationInputValue}
                 onChange={this.handleInputChange}
                 placeholder="Enter a location">
@@ -157,6 +158,7 @@ class App extends Component {
               <div className="input-group-append">
                 <RadiusSelect
                   className="form-control"
+                  disabled={pendingRequest}
                   onChange={this.handleSelectChange}>
                     {searchRadiusOptions.map((option, i) => {
                       return <option key={i} value={option.value}>{option.name}</option>

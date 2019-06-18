@@ -8,7 +8,8 @@ export const Wrapper = styled.div`
     background-color: white;
     display: flex;
     &:hover {
-        border: 1px solid blue;
+        border: 1px solid #9fb7dd;
+        border-left: 10px solid #9fb7dd;
     };
 `;
 
@@ -16,7 +17,7 @@ export const LogoWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid black;
+    border-right: 1px dashed black;
     padding-left: 0px;
 `;
 

@@ -39,12 +39,14 @@ export const RadiusSelect = styled.select`
 `;
 
 export const FindStationButton = styled.button`
+  // border: black 1px solid;
   @media all and (max-width: 736px) {
     font-size: 12px;
   }
 `;
 
 export const FindStationNearMeButton = styled.button`
+  border-left: black 1px solid;
   @media all and (max-width: 736px) {
     font-size: 12px;
   }

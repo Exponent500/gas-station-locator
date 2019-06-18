@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import unbrandedStationImage from '../../assets/images/Transport-Gas-Pump-icon.png';
+import unbrandedStationImage from '../../assets/images/unbranded-station.png';
 
 import {
     Wrapper,
