@@ -28,8 +28,7 @@ class App extends Component {
     super(props);
     this.state = {
       locationInputValue: '',
-      searchRadiusOptions: [
-      {
+      searchRadiusOptions: [{
         value: 1,
         name: '1 mi'
       },
@@ -119,7 +118,7 @@ class App extends Component {
       return gasStations.map((gasStation) => {
         return <GasStation key={gasStation.address} station={gasStation}></GasStation>
       });
-    } else if(gasStations && gasStations.length === 0 && gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.FAILED) {
+    } else if (gasStations && gasStations.length === 0 && gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.FAILED) {
       //TODO: Show something better looking than a plain div with no styling.
       return <div>Error retrieving gas stations</div>
     }
