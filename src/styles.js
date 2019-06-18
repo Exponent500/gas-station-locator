@@ -6,9 +6,21 @@ export const AppWrapper = styled.div`
 
 export const AppHeader = styled.div`
   background-color: #222;
-  height: 150px;
+  height: 100px;
   padding: 20px;
   color: white;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+`;
+
+export const HeaderLogo = styled.img`
+  width: 80px;
+  height: 80px;
+`;
+
+export const HeaderTitle = styled.div`
+  margin-left: 10px;
 `;
 
 export const ContentWrapper = styled.div`
