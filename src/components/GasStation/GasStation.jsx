@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Image from '../Image/Image';
 import unbrandedStationImage from '../../assets/images/unbranded-station.png';
 import fallBackStationImage from '../../assets/images/404.png';
+import locationIcon from '../../assets/images/location-pin.png';
 
 import {
     Wrapper,
@@ -21,7 +22,8 @@ import {
     GasTypeHeader,
     GasStationInfoWrapper,
     GasStationInfo,
-    GasTypeWrapper
+    GasTypeWrapper,
+    LocationPin
 } from './styles';
 
 class GasStation extends Component {
@@ -40,6 +42,8 @@ class GasStation extends Component {
 
     render() {
         const { station } = this.props;
+        const destinationAddress = `${station.address} ${station.city} ${station.region} ${station.zip}`
+        const mapLink = `https://www.google.com/maps/dir/?api=1&destination=${destinationAddress}`
         return (
             <Wrapper className="col-10 offset-1">
                 <LogoWrapper className="col-4 col-md-2">
@@ -48,7 +52,12 @@ class GasStation extends Component {
                 <GasStationInfoWrapper className="col-8 col-md-10">
                     <GasStationInfo className="row">
                         <div className="col-12 col-md-6">
-                            <Name>{station.station}</Name>
+                            <Name>
+                                {station.station}
+                                <LocationPin href={mapLink} target="_blank">
+                                    <img src={locationIcon}></img>
+                                </LocationPin>
+                            </Name>
                             <AddressLine1>{station.address}</AddressLine1>
                             <AddressLine2>
                                 <City>{station.city}</City>,

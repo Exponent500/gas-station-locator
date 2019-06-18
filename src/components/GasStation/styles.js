@@ -148,3 +148,19 @@ export const GasStationInfoWrapper = styled.div`
 export const GasStationInfo = styled.div`
     width: 100%;
 `;
+
+export const LocationPin = styled.a`
+    img {
+        height: 25px;
+        width: 25px;
+        margin-bottom: 2px;
+        margin-left: 3px;
+    }
+
+    @media all and (max-width: 736px) {
+        img {
+            height: 20px;
+            width: 20px;
+        }
+    }
+`;
