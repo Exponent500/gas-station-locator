@@ -26,10 +26,13 @@ import {
 class GasStation extends Component {
     renderLogo() {
         const { station } = this.props;
+        // Remove all whitespace, including spaces. This handles the corner case where the station name is 'Circle K'. In this case
+        // we want to have the string be 'CircleK' instead of 'Circle K'. so that we point to the correct image source for this station.
+        station.station = station.station.replace(/\s/g, '');
         if (station.station === 'Unbranded') {
             return <Logo src={unbrandedStationImage}></Logo>
         } else {
-            return <Logo src={`//logo.clearbit.com/${station.station}.com`}></Logo>
+            return <Logo src={`//logo.clearbit.com/${station.station}.com`} alt={unbrandedStationImage}></Logo>
         }
     }
 

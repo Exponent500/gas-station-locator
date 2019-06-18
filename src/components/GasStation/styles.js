@@ -17,6 +17,7 @@ export const LogoWrapper = styled.div`
     justify-content: center;
     align-items: center;
     border-right: 1px solid black;
+    padding-left: 0px;
 `;
 
 export const Logo = styled.img`
@@ -99,19 +100,25 @@ export const DistanceToLocation = styled.div`
 export const PricesWrapper = styled.div`
     display: flex;
     text-align: left;
-    padding-top: 10px;
-    padding-left: 5px;
+    padding-top: 0px;
+    padding-right: 5px;
+    padding-left: 10px;
+    @media all and (max-width: 736px) {
+        padding-top: 10px;
+    }
 `;
 
 export const GasTypeHeader = styled.div`
     font-size: 18px;
     font-weight: bold;
     @media all and (max-width: 736px) {
-        font-size: 14px;
+        font-size: 12px;
     }
 `;
 
 export const GasTypeWrapper = styled.div`
+    text-align: center;
+
     @media all and (max-width: 736px) {
         padding-right: 5px;
         padding-left: 5px;
@@ -138,6 +145,9 @@ export const PremiumPrice = styled.div`
 
 export const GasStationInfoWrapper = styled.div`
     display: flex;
+    padding-right: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 `;
 
 export const GasStationInfo = styled.div`
