@@ -6,7 +6,8 @@ import {
   LocationInput,
   RadiusSelect,
   FindStationButton,
-  FindStationNearMeButton
+  FindStationNearMeButton,
+  GasStationSearchBar
 } from './styles'
 import GasStation from './components/GasStation/GasStation';
 import MyGasFeedAPI from './services/MyGasFeedAPI';
@@ -25,6 +26,10 @@ class App extends Component {
     this.state = {
       locationInputValue: '',
       searchRadiusOptions: [{
+        value: '',
+        name: 'Select Radius',
+      },
+      {
         value: 1,
         name: '1 mile'
       },
@@ -137,35 +142,56 @@ class App extends Component {
     return (
       <AppWrapper>
         <AppHeader>
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          {/* <h2>Welcome to React</h2> */}
+          Gas Stations
         </AppHeader>
         <ContentWrapper className="col-xs-12">
-          <LocationInput
-            className="col-xs-4"
-            value={locationInputValue}
-            onChange={this.handleInputChange}
-            placeholder="Enter a location">
-          </LocationInput>
-          <RadiusSelect
-            className="col-xs-2"
-            onChange={this.handleSelectChange}>
-              {searchRadiusOptions.map((option, i) => {
-                return <option key={i} value={option.value}>{option.name}</option>
-              })}
-          </RadiusSelect>
-          <FindStationButton
-            className="btn btn-primary col-xs-2"
-            disabled={pendingRequest || disableFindStationButton}
-            onClick={this.findStations}>
-              Find a Station
-          </FindStationButton>
-          <FindStationNearMeButton
-            className="btn btn-primary col-xs-2"
-            disabled={pendingRequest}
-            onClick={this.findStationsNearMe}>
-              Find Near Me
-          </FindStationNearMeButton>
+          <GasStationSearchBar className="col-xs-10">
+            <div class="input-group">
+              {/* <div class="input-group-prepend"> */}
+                {/* <RadiusSelect
+                  className="col-xs-2"
+                  onChange={this.handleSelectChange}>
+                    {searchRadiusOptions.map((option, i) => {
+                      return <option key={i} value={option.value}>{option.name}</option>
+                    })}
+                </RadiusSelect> */}
+              {/* </div> */}
+              <LocationInput
+                className="form-control"
+                value={locationInputValue}
+                onChange={this.handleInputChange}
+                placeholder="Enter a location">
+              </LocationInput>
+              <div className="input-group-append">
+                <RadiusSelect
+                  className="form-control"
+                  onChange={this.handleSelectChange}>
+                    {searchRadiusOptions.map((option, i) => {
+                      return <option key={i} value={option.value}>{option.name}</option>
+                    })}
+                </RadiusSelect>
+                <FindStationButton
+                  className="btn btn-primary"
+                  disabled={pendingRequest || disableFindStationButton}
+                  onClick={this.findStations}>
+                  Find a Station
+                </FindStationButton>
+                <FindStationNearMeButton
+                  className="btn btn-primary"
+                  disabled={pendingRequest}
+                  onClick={this.findStationsNearMe}>
+                    Find Near Me
+                </FindStationNearMeButton>
+              </div>
+            </div>
+            {/* <RadiusSelect
+              className="col-xs-2"
+              onChange={this.handleSelectChange}>
+                {searchRadiusOptions.map((option, i) => {
+                  return <option key={i} value={option.value}>{option.name}</option>
+                })}
+            </RadiusSelect> */}
+          </GasStationSearchBar>
           {this.renderLoadingSpinner()}
           {this.renderGasStations()}
         </ContentWrapper>
