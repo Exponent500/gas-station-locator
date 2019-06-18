@@ -5,7 +5,7 @@ export const AppWrapper = styled.div`
 `;
 
 export const AppHeader = styled.div`
-  background-color: #222;
+  background-color: black;
   height: 100px;
   padding: 20px;
   color: white;
