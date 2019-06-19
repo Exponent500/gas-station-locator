@@ -12,7 +12,7 @@ import {
   HeaderTitle
 } from './styles'
 import appLogo from './assets/images/AppLogo.png';
-import GasStation from './components/GasStation/GasStation';
+import GasStationList from './components/GasStationList/GasStationList';
 import MyGasFeedAPI from './services/MyGasFeedAPI';
 import LocationIQAPI from './services/LocationIQAPI';
 
@@ -115,9 +115,7 @@ class App extends Component {
       //TODO: Show something better looking than a plain div with no styling.
       return <div>No results found!</div>
     } else if (gasStations && gasStations.length) {
-      return gasStations.map((gasStation) => {
-        return <GasStation key={gasStation.address} station={gasStation}></GasStation>
-      });
+      return <GasStationList stations={gasStations}/>
     } else if (gasStations && gasStations.length === 0 && gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.FAILED) {
       //TODO: Show something better looking than a plain div with no styling.
       return <div>Error retrieving gas stations</div>

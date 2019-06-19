@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
     border-radius: 10px;
     box-shadow: 0px 0px 10px 0px gray;
     position: relative;
-    margin-top: 25px;
+    margin-bottom: 30px;
     background-color: white;
     display: flex;
     &:hover {
