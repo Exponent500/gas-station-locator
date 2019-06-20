@@ -9,14 +9,17 @@ import {
   FindStationNearMeButton,
   GasStationSearchBar,
   HeaderLogo,
-  HeaderTitle
+  HeaderTitle,
+  NoResults,
+  ErrorRetrievingStations,
+  Loading
 } from './styles'
 import appLogo from './assets/images/AppLogo.png';
 import GasStationList from './components/GasStationList/GasStationList';
 import MyGasFeedAPI from './services/MyGasFeedAPI';
 import LocationIQAPI from './services/LocationIQAPI';
 
-const GAS_STATION_REQUEST_STATUS ={
+export const GAS_STATION_REQUEST_STATUS ={
   NOT_SENT: 'NOT_SENT',
   PENDING: 'PENDING',
   SUCCESS: 'SUCCESS',
@@ -24,8 +27,8 @@ const GAS_STATION_REQUEST_STATUS ={
 };
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       locationInputValue: '',
       searchRadiusOptions: [{
@@ -60,7 +63,7 @@ class App extends Component {
     }
   }
 
-  findStations = () => {
+  findStations() {
     const { locationInputValue, searchRadiusInMiles } = this.state;
 
     this.setState({ gasStations: [], gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.PENDING });
@@ -68,7 +71,7 @@ class App extends Component {
     LocationIQAPI.getCoordinates(locationInputValue)
       .then((result) => MyGasFeedAPI.getNearbyGasStations(result[0].lat, result[0].lon, searchRadiusInMiles))
       .then((result) => this.setState({ gasStations: result.stations, gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.SUCCESS }))
-      .catch(() => this.setState({ gasStations: [], gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.FAILED }))
+      .catch(() => this.setState({ gasStations: [], gasStationRequestStatus: GAS_STATION_REQUEST_STATUS.FAILED }));
   }
 
   findStationsNearMe = () => {
@@ -112,21 +115,18 @@ class App extends Component {
     const { gasStations, gasStationRequestStatus } = this.state;
 
     if (gasStations && gasStations.length === 0 && gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.SUCCESS) {
-      //TODO: Show something better looking than a plain div with no styling.
-      return <div>No results found!</div>
+      return <NoResults>No Results Found</NoResults>;
     } else if (gasStations && gasStations.length) {
-      return <GasStationList stations={gasStations}/>
+      return <GasStationList stations={gasStations}/>;
     } else if (gasStations && gasStations.length === 0 && gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.FAILED) {
-      //TODO: Show something better looking than a plain div with no styling.
-      return <div>Error retrieving gas stations</div>
+      return <ErrorRetrievingStations>Error retrieving gas stations</ErrorRetrievingStations>;
     }
   }
 
-  renderLoadingSpinner() {
+  renderLoading() {
     const { gasStationRequestStatus } = this.state;
     if (gasStationRequestStatus === GAS_STATION_REQUEST_STATUS.PENDING) {
-      //TODO: show a spinner instead
-      return <div>Loading...</div>;
+      return <Loading>Loading...</Loading>;
     } else {
       return null;
     }
@@ -176,7 +176,7 @@ class App extends Component {
               </div>
             </div>
           </GasStationSearchBar>
-          {this.renderLoadingSpinner()}
+          {this.renderLoading()}
           {this.renderGasStations()}
         </ContentWrapper>
       </AppWrapper>

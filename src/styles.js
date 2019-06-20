@@ -57,3 +57,12 @@ export const GasStationSearchBar = styled.div`
   padding-bottom: 10px;
   padding: 10px;
 `;
+
+export const NoResults = styled.div`
+`;
+
+export const ErrorRetrievingStations = styled.div`
+`;
+
+export const Loading = styled.div`
+`;

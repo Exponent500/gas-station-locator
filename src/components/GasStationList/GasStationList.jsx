@@ -49,7 +49,7 @@ class GasStationList extends Component {
         const startIndex = currentPage * itemsPerPage;
         const endIndex = startIndex + (itemsPerPage - 1);
 
-        const stationsToDisplay = stations.slice(startIndex, endIndex )
+        const stationsToDisplay = stations.slice(startIndex, endIndex );
         return stationsToDisplay.map((gasStation) => {
             return <GasStation key={gasStation.address} station={gasStation} />
         })
@@ -96,10 +96,9 @@ class GasStationList extends Component {
             <div>
                 <PaginationContainer className="col-10 offset-1">
                     <PageSizeContainer>
-                        <PageSizeSelectLabel for="pageSizeSelect">Per Page</PageSizeSelectLabel>
+                        <PageSizeSelectLabel>Per Page</PageSizeSelectLabel>
                         <PageSizeSelect
                             className="form-control"
-                            id="pageSizeSelect"
                             onChange={this.handlePageSizeChange}>
                                 {pageSizeOptions.map((option, i) => {
                                 return <option key={i} value={option.value}>{option.name}</option>
@@ -107,10 +106,9 @@ class GasStationList extends Component {
                         </PageSizeSelect>
                     </PageSizeContainer>
                     <PageSelectContainer>
-                        <PageSelectLabel for="pageSelect">Page #</PageSelectLabel>
+                        <PageSelectLabel>Page #</PageSelectLabel>
                         <PageSelect
                             className="form-control"
-                            id="pageSelect"
                             onChange={this.handlePageSelectChange}>
                             {this.renderPageSelectOptions()}
                         </PageSelect>
